@@ -14,6 +14,7 @@ do_action('perci_post_reco', ['userid' => wp_get_current_user()->ID, 'postid' =>
 ```
 * 配置/plugin/config.ini
 ```
+
 | 参数 			| 值									|
 | ------------- | ------------------------------------- |
 | host			| 数据库地址							|
@@ -21,7 +22,7 @@ do_action('perci_post_reco', ['userid' => wp_get_current_user()->ID, 'postid' =>
 | user			| wordpress的数据库的用户名 			|
 | password		| wordpress的数据库用户的密码			|
 | database		| wordpress的数据库名					|
-| table_prefix 	| wordpress的数据库表前缀。如wp		|
+| table_prefix 	| wordpress的数据库表前缀。如wp			|
 ```
 * 安装完毕。
 
