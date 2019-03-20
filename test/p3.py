@@ -1,5 +1,6 @@
 #coding:utf-8
 
+# 这个是弄到自己新建的表里，已抛弃此版本
 import os
 import configparser
 import pymysql
@@ -118,14 +119,14 @@ def recommend(model, data, userid):
 	save_recoitems(userid, top_items)
 
 def save_recoitems(userid, top_items):
-	sql_get_perreco = "select meta_value from " + db_config['prefix'] + "_usermeta where user_id='" + str(userid) + "' and meta_key='_perci_haku_reco'"
+	sql_get_perreco = "select postid from perci_haku_reco where userid='" + str(userid) + "'"
 	cursor.execute(sql_get_perreco)
 	data = cursor.fetchone()
 	
 	if data is None:
-		sql_set_perreco = "insert into " + db_config['prefix'] + "_usermeta (`user_id`, `meta_key`, `meta_value`) values ('" + str(userid) + "', '_perci_haku_reco','"	
+		sql_set_perreco = "insert into perci_haku_reco (`userid`, `postid`) values ('" + str(userid) + "', '"	
 	else :
-		sql_set_perreco = "update " + db_config['prefix'] + "_usermeta set meta_value='"
+		sql_set_perreco = "update perci_haku_reco set postid='"
 
 	
 	for i in range(0, len(top_items)):
@@ -134,7 +135,7 @@ def save_recoitems(userid, top_items):
 	if data is None:
 		sql_set_perreco = sql_set_perreco + "')"
 	else:
-		sql_set_perreco = sql_set_perreco  + "' where user_id='" + str(userid) + "' and meta_key='_perci_haku_reco'"
+		sql_set_perreco = sql_set_perreco  + "' where userid='" + str(userid) + "'"
 	
 	try :
 		cursor.execute(sql_set_perreco)
