@@ -46,7 +46,7 @@ for i in range(0, len(history)):
 
 # 匹配文章的作者id
 print("Matching the author id...")
-sql_query_posts = "select id, post_author from " + db_config['prefix'] + "_posts"
+sql_query_posts = "select id, post_author from " + db_config['prefix'] + "_posts where post_status='publish'"
 cursor.execute(sql_query_posts)
 all_posts = cursor.fetchall()
 for i in range(0, len(dict)):
@@ -57,6 +57,7 @@ for i in range(0, len(dict)):
 		if (str(all_posts[k][0]) == dict[i]['postid']):
 			dict[i]['author_id'] = all_posts[k][1]
 			tai = 0;
+
 
 # 匹配文章的分类id
 print("Matching the category id...")
@@ -71,15 +72,23 @@ for i in range(0, len(dict)):
 		if (str(all_cats[k][0]) == dict[i]['postid']):
 			dict[i]["cat_id"] = all_cats[k][1]
 			tai = 0;
+
+dict2 = []
+for i in range(0, len(dict)):
+	if ("author_id" in dict[i].keys() and "cat_id" in dict[i].keys()):
+		dict2.append(dict[i])
+dict = dict2
+
 import numpy as np
 dict = np.array(dict)
 
+print(dict)
 from lightfm.data import Dataset
 
 print("Build the dataset...")
 dataset = Dataset()
 dataset.fit((x['userid'] for x in dict), (x['postid'] for x in dict))
-dataset.fit_partial(items=(x['postid'] for x in dict), item_features=(x['author_id'] for x in dict))
+dataset.fit_partial(items=(x['postid'] for x in dict), item_features=(x["author_id"] for x in dict))
 dataset.fit_partial(items=(x['postid'] for x in dict), item_features=(x["cat_id"] for x in dict))
 
 num_users, num_items = dataset.interactions_shape()
