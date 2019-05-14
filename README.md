@@ -36,20 +36,15 @@ do_action('perci_post_reco', ['userid' => wp_get_current_user()->ID, 'postid' =>
 ```
 一种可能的推荐文章栏目对应的分类模板文件里的一些代码。category-35.php:
 <?php
-			$recoposts2 = get_usermeta(wp_get_current_user()->ID, '_perci_haku_reco');
-            $recoposts2 = substr($recoposts2, 1);
-            $recoposts = explode("|", $recoposts2);
-            
-            global $posts;
-            
-			$rposts = [];
-			if (count($recoposts)) {
-				for($i=0; $i<count($recoposts); $i++) {
-					$rposts[] = get_post((int)$recoposts[$i]);
-				}
-			}
+$recoposts = get_usermeta(wp_get_current_user()->ID, '_perci_haku_reco');
+$recoposts = substr($recoposts, 1);
+$recoposts = explode("|", $recoposts);
 
-			$posts = $rposts;
+for ($i=0; $i<count($recoposts); $i++) {
+    $recoposts[$i] = (int) $recoposts[$i];
+}
+
+query_posts(array('post__in' => $recoposts));
 ?>
 这样就将The Loop中的文章列表替换为推荐文章列表
 ```
